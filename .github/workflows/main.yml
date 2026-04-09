@@ -1,14 +1,14 @@
-name: DevSecOps Pipeline
-
-on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-    - name: Run app
-      run: node index.js
+    - name: Build Docker image
+      run: docker build -t app .
+
+    - name: Scan with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'app'
